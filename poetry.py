@@ -5,6 +5,10 @@ from collections import defaultdict, Counter
 from random import random, choice
 import syllables
 import sys
+import curses
+from curses.ascii import isdigit
+import nltk
+from nltk.corpus import cmudict
 
 
 def clean_input(data):
@@ -52,11 +56,17 @@ def select_followon_word(mapping, word):
 
 def count_syllables(word):
     #d = cmudict.dict()
-    #return [len(list(y for y in x if isdigit(y[-1]))) for x in d[word.lower()]]
+    #try:
+        #count = [len(list(y for y in x if isdigit(y[-1]))) for x in d[word.lower()]][0]
+    #except KeyError:
+        #return syllables.count(word)
+    ##print word, count
+    #return count
     return syllables.count(word)
 
 
 def count_syllables_in_line(line):
+    line = line.split(" ")
     syllable_count = 0
     for word in line:
         syllable_count += count_syllables(word)
@@ -96,6 +106,10 @@ if __name__ == '__main__':
     args = sys.argv[1:]
     corpus = ""
     for f in args:
+        print "Loading " + f
         with open(f) as fh:
             corpus += fh.read()
-    make_art(corpus)
+    while True:
+        print ""
+        make_art(corpus)
+        raw_input()
